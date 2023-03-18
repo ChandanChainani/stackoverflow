@@ -1,0 +1,76 @@
+{{ define "home" }}
+<head xmlns="http://www.w3.org/1999/html">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/home.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Home - Match Maker</title>
+</head>
+
+<body>
+
+<!-- Button to open the modal login form -->
+<button onclick="document.getElementById('id01').style.display='block'" class="addPlayer">Add Player</button>
+
+<button onclick="generateGames()">Generate Games</button>
+
+</br>
+
+{{ template "displayPlayer" .}}
+
+</br>
+
+<!-- The Modal -->
+<div id="id01" class="modal">
+    <form class="modal-content animate" action="/" method="post" onsubmit="return onSubmit(event);">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <img src="/assets/be.png" alt="Avatar" class="avatar">
+        </div>
+
+        <div class="container">
+            <label for="fname" style="align-content: center"><b>First Name</b></label>
+            <input type="text" placeholder="John" name="firstName" required>
+
+            <label for="lname" style="align-content: center"><b>Last Name</b></label>
+            <input type="text" placeholder="Smith" name="lastName" required>
+        </div>
+
+        <div class="container">
+            Select Gender:
+            </br>
+            <label>
+                <input type="radio" name="gender" value="male" required>Male
+            </label>
+            </br>
+            <label>
+                <input type="radio" name="gender" value="female">Female
+            </label>
+        </div>
+
+        <div class="container" style="background-color:#f1f1f1; text-align: center">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="modelButtons">
+                Cancel
+            </button>
+            <button id="subbtn" type="submit" class="modelButtons">Submit
+            </button>
+        </div>
+    </form>
+    <div>
+      <table id="players"></table>
+    </div>
+</div>
+<script src="/assets/home.js"></script>
+<script>
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>
+{{ end }}
