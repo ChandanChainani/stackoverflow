@@ -1,0 +1,68 @@
+package main
+
+import (
+  "fmt"
+  // "log"
+  "sync"
+  "time"
+
+  "os"
+  "os/signal"
+)
+
+func main() {
+  config := &Config{
+    Data: sync.Map{},
+    DeltaCh: make(chan string, 1),
+  }
+
+  c := make(chan os.Signal, 1)
+  signal.Notify(c, os.Interrupt)
+
+  fmt.Println("Started")
+  config.Wg.Add(1)
+  go config.load()
+  config.DeltaCh <- "Old Data"
+  config.Wg.Add(1)
+
+  time.Sleep(1600 * time.Millisecond)
+  go config.detect()
+  config.Wg.Wait()
+  fmt.Println("Ended")
+
+  close(config.DeltaCh)
+}
+
+type Config struct {
+  Data sync.Map
+  DeltaCh chan string
+  Wg sync.WaitGroup
+}
+
+func (c *Config) detect() {
+  defer c.Wg.Done()
+  fmt.Println("===DETECT===")
+  c.DeltaCh <- "New Data"
+}
+
+func read(path string) (map[string]string, error) {
+  fmt.Println("Reading")
+  data := make(map[string]string)
+  data[path] = ""
+  return data, nil
+}
+
+func (c *Config) load() {
+  defer c.Wg.Done()
+  fmt.Println("===LOAD===")
+  path := <-c.DeltaCh
+  fmt.Println("===READ===")
+  data, err := read(path)
+  fmt.Println(data, err)
+  if err == nil {
+    fmt.Println("===UPDATING===")
+    for k, v := range data {
+      fmt.Println(k, v)
+    }
+  }
+}
