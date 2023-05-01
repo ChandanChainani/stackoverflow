@@ -36,6 +36,7 @@ func Provider() *schema.Provider {
 			"hashicups_coffees":     dataSourceCoffees(),
 			"hashicups_order":       dataSourceOrder(),
 			"hashicups_ingredients": dataSourceIngredients(),
+			"hashicups_projects":    dataSourceProjects(),
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
