@@ -1,0 +1,7 @@
+Start
+<%= yield if block_given? -%>
+<% "SELF: #{self.methods}\n" -%>
+<% "Binding: #{binding}\n" -%>
+<% "Binding: #{binding.methods}\n" -%>
+<% "Binding: #{binding.local_variables}\n" -%>
+End

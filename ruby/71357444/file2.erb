@@ -1,0 +1,8 @@
+<% @result = render('file1.erb') do -%>
+<%
+  <<~EOF
+    Some Text
+  EOF
+-%>
+<% end -%>
+<%= @result -%>
