@@ -1,0 +1,62 @@
+<div class="row" id="tablediv">
+  <div class="col">
+    <table class="table table-striped table-bordered" id="table">
+      {% for department in data['departments'] %}
+        <tr>
+          <td>{{ department.name }}</td>
+          <td className="select">
+            <select name="cardgroups_{{ department.id }}">
+              {% for card in data['cardgroups'] %}
+                  <option value='{{ card.id }}'>{{ card.name }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td className="select">
+            <select name="doorgroups_{{ department.id }}">
+              {% for door in data['doorgroups'] %}
+                  <option value='{{ door.id }}'>{{ door.name }}</option>
+              {% endfor %}
+            </select>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<script>
+  // const office_cardgroups = data['cardgroups']
+  // const office_doorgroups = data['doorgroups']
+
+  // const table = document.getElementById("table");
+  // const header = table.createTHead();
+  // var row = header.insertRow(0);
+  // row.insertCell(0).innerHTML = "<b>Departments</b>";
+  // row.insertCell(1).innerHTML =  "<b>Card Groups</b>";
+  // row.insertCell(2).innerHTML =  "<b>Door Groups</b>";
+
+  // {% for department in departments %}
+  //     var rowCount = table.rows.length;
+  //     var row = table.insertRow(rowCount);
+  //     row.insertCell(0).innerHTML = "{{ department.name }}";
+  //     var row_cardgroup = '<td className="select"><select id="cardgroups_{{ department.id }}">'
+
+  //     for (const [key, cardgroup] of Object.entries(office_cardgroups)) {
+  //         var row_cardgroup = row_cardgroup + '<option value=' + cardgroup['id'] + '>'+ cardgroup['name']+'</option>'
+  //     }
+  //     row_cardgroup = row_cardgroup + '</select></td>'
+
+  //     row.insertCell(1).innerHTML = row_cardgroup
+
+  //     var row_doorgroup = '<td className="select"><select id="cardgroups_{{ department.id }}">'
+
+  //     for (const [key, doorgroup] of Object.entries(office_doorgroups)) {
+  //         var row_doorgroup = row_doorgroup + '<option value=' + doorgroup['id'] + '>'+ doorgroup['name']+'</option>'
+  //     }
+
+  //     row_doorgroup = row_doorgroup +  '</selec></td>'
+
+  //     row.insertCell(2).innerHTML = row_doorgroup
+
+  // {% endfor %}
+</script>

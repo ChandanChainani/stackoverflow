@@ -1,0 +1,101 @@
+<div class="row" id="tablediv">
+  <div class="col">
+    <table class="table table-striped table-bordered" id="table"></table>
+    <button id="send-data">Submit</button>
+  </div>
+</div>
+
+<script>
+    const office_cardgroups = {{ data['cardgroups'] | safe }}
+    const office_doorgroups = {{ data['doorgroups'] | safe }}
+
+    const table = document.getElementById("table");
+    const header = table.createTHead();
+    var row = header.insertRow(0);
+    row.insertCell(0).innerHTML = "<b>Departments</b>";
+    row.insertCell(1).innerHTML =  "<b>Card Groups</b>";
+    row.insertCell(2).innerHTML =  "<b>Door Groups</b>";
+
+    {% for department in data['departments'] %}
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+        row.insertCell(0).innerHTML = "{{ department.name }}";
+        var row_cardgroup = '<td className="select"><select id="cardgroups_{{ department.id }}">'
+
+        for (const [key, cardgroup] of Object.entries(office_cardgroups)) {
+            var row_cardgroup = row_cardgroup + '<option value=' + cardgroup['id'] + '>'+ cardgroup['name']+'</option>'
+        }
+        row_cardgroup = row_cardgroup + '</select></td>'
+
+        row.insertCell(1).innerHTML = row_cardgroup
+
+        var row_doorgroup = '<td className="select"><select id="doorgroups_{{ department.id }}">'
+
+        for (const [key, doorgroup] of Object.entries(office_doorgroups)) {
+            var row_doorgroup = row_doorgroup + '<option value=' + doorgroup['id'] + '>'+ doorgroup['name']+'</option>'
+        }
+
+        row_doorgroup = row_doorgroup +  '</selec></td>'
+
+        row.insertCell(2).innerHTML = row_doorgroup
+
+    {% endfor %}
+
+    const departments = {{ data['departments'] | safe }}
+
+    document.querySelector('#send-data').addEventListener('click', function() {
+        console.log('clicked');
+        const form_data = new FormData();
+        departments.forEach(function(department) {
+            let card_id = `cardgroups_${department.id}`;
+            form_data.append(card_id, document.querySelector("#" + card_id).value);
+            let door_id = `doorgroups_${department.id}`;
+            form_data.append(door_id, document.querySelector("#" + door_id).value);
+        })
+        const url = 'http://localhost:5000/v1';
+        const xhr = new XMLHttpRequest();
+
+        xhr.open( 'POST', url, true );
+        // xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.onreadystatechange = function ( response ) {};
+        xhr.send( form_data );
+
+        // $.ajax({
+        //   url: url,
+        //   data: form_data,
+        //   processData: false,
+        //   contentType: false,
+        //   type: 'POST',
+        //   success: function(data){
+        //     alert(data);
+        //   }
+        // });
+
+        // $.ajax({
+        //     url: 'http://hacheck.tel.fer.hr/xml.pl',
+        //     data: data,
+        //     processData: false,
+        //     type: 'POST',
+
+        //     // This will override the content type header,
+        //     // regardless of whether content is actually sent.
+        //     // Defaults to 'application/x-www-form-urlencoded'
+        //     contentType: 'multipart/form-data',
+
+        //     //Before 1.5.1 you had to do this:
+        //     beforeSend: function (x) {
+        //         if (x && x.overrideMimeType) {
+        //             x.overrideMimeType("multipart/form-data");
+        //         }
+        //     },
+        //     // Now you should be able to do this:
+        //     mimeType: 'multipart/form-data',    //Property added in 1.5.1
+
+        //     success: function (data) {
+        //         alert(data);
+        //     }
+        // });
+    });
+
+
+</script>
